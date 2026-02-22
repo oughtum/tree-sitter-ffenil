@@ -1,0 +1,89 @@
+import modules::lib;
+merge modules::conf;
+import modules::libAndConf;
+
+import std::{ self::fmt, io };
+
+str             = "foo bar";
+interpolatedStr = "${str} baz";
+rawString       = r#"foo bar"#;
+decimalInt      = 42;
+binaryInt       = 0b0101;
+octalInt        = 0o27;
+hexInt          = 0x9F0ACF;
+float           = 3.14;
+bool            = false;
+unit            = ();
+tuple           = (1.0, 2.0, false);
+array           = [ 1, 2, 3, 4, 5 ];
+record          = { name = "Toby Larone", age = 37 };
+closure         = |a : int| |b : int| a + b;
+
+mutated = let
+  mut x = 4;
+  y = 5;
+  x <- y;
+in
+  x; -- returns 5
+
+updatedRecord = let
+  mut record             = { key = "value" };
+  record.key2           <- 4;
+  record."stringKey :3" <- true;
+  record                 = { freshKey = "freshValue" };
+in
+  record; 
+
+type TypeAlias   = [(float, int)];
+
+type UnitType    = ();
+type AnyType     = any;
+type StrType     = str;
+type IntType     = int;
+type FloatType   = float;
+type BoolType    = bool;
+type TupleType   = (int, bool);
+type ArrayType   = [str];
+type RecordType  = { key : str, optionalKey? : float, "stringKey" : bool };
+type ClosureType = int -> int -> int;
+
+inferredType       = ":3";
+explicitType : int = 7;
+
+{-
+  block comment
+-}
+
+@-
+  # This is a doc comment
+  Doc comments are used to provide documentation for variables/types
+  Contents must follow the Markdown spec.
+-@
+
+ifThenElse     = if isOdd 1 then "odd" else "even";
+andOr          = true and (false or true);
+letIn          = let x = 4; in 4;
+doExpr         = do print ":3";
+enum Option    = Some str | None;
+inherited =
+  let
+    a = ":D";
+    b = ":o";
+  in
+    { inherit a b };
+option = Option::None;
+matchExpr = match option;
+  Some string => true,
+  { key, value, .. } => false;
+a              = 1;
+record         = { a = 2 };
+withExpr       = with record; a;
+scopedWithExpr = with scoped record; a;
+
+called = a.b.c 4;
+
+pub public = ":D";
+private    = ":c";
+
+return { hostName = "gallifrey" };
+

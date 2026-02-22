@@ -1,0 +1,45 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "ffenil",
+      "camelcase": "Ffenil",
+      "title": "Ffenil",
+      "scope": "source.ffenil",
+      "file-types": [
+        "ffnl"
+      ],
+      "injection-regex": "^ffenil$",
+      "class-name": "TreeSitterFfenil",
+      "highlights": [
+        "queries/highlights.scm"
+      ],
+      "injections": [
+        "queries/injections.scm"
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Ffenil grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Autumn Baker",
+        "email": "autumnbakerev@gmail.com"
+      }
+    ],
+    "links": {
+      "repository": "github.com:oughtum/tree-sitter-ffenil"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
