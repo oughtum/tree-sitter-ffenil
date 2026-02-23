@@ -31,7 +31,8 @@ const LET = "let";
 const MUT = "mut";
 const IN = "in";
 const RETURN = "return";
-
+const SELF = "self";
+const ROOT = "root";
 
 module.exports = grammar({
   name: "ffenil",
@@ -70,7 +71,9 @@ module.exports = grammar({
       LET,
       MUT,
       IN,
-      RETURN
+      RETURN,
+      SELF,
+      ROOT
     ]
   },
 

@@ -40,19 +40,21 @@
 ;---------;
 ; MODULES ;
 ;---------;
-(imports
-  [
-    (module_path (identifier))
-    (module_group (module_path (identifier)))
-  ] @namespace)
-(imports
-  [
-    (module_path
-      (identifier) @variable.builtin (#eq? @variable.builtin "self"))
-    (module_group
-      (module_path
-        (identifier) @variable.builtin (#eq? @variable.builtin "self")))
-  ] @namespace)
+[
+  (module_path (identifier))
+  (module_group (module_path (identifier)))
+] @namespace
+  
+(module_path
+  . (identifier) @variable.builtin (#eq? @variable.builtin "self"))
+(module_path
+  . (identifier) @variable.builtin (#eq? @variable.builtin "root"))
+(module_group
+  (module_path
+    . (identifier) @variable.builtin (#eq? @variable.builtin "self")))
+(module_group
+  (module_path
+    . (identifier) @variable.builtin (#eq? @variable.builtin "root")))
 
 ;----------;
 ; LITERALS ;
@@ -74,9 +76,6 @@
 (var_declaration
   (identifier) @variable)
 
-(get
-  (module_path 
-    (identifier) @namespace))
 (assignment
   (get
     (module_path
