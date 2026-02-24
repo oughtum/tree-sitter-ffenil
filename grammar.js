@@ -31,7 +31,6 @@ const LET = "let";
 const MUT = "mut";
 const IN = "in";
 const RETURN = "return";
-const SELF = "self";
 const ROOT = "root";
 
 module.exports = grammar({
@@ -72,7 +71,6 @@ module.exports = grammar({
       MUT,
       IN,
       RETURN,
-      SELF,
       ROOT
     ]
   },
@@ -94,28 +92,11 @@ module.exports = grammar({
         seq(IMPORT, optional(MERGE)),
         seq(MERGE, optional(IMPORT))
       ),
-      choice(
-        $.module_group,
-        $._submodule_group
-      ),
+      $.module_path,
       ";"
     ),
-    //  foo::{ bar::{ baz, quux }, corge }
-    // { foo, bar, baz::quux }
-    // foo::bar::baz
-
-    // foo::bar::baz::quux::{}
-    
-    module_group: $ => seq(
-      "{",
-      $._submodule_group,
-      repeat(seq(",", $._submodule_group)),
-      optional(","),
-      "}"
-    ),
-    _submodule_group: $ => seq($.module_path, optional(seq("::", $.module_group))),
     module_path: $ => seq(
-      $.identifier,
+      choice(ROOT, $.identifier),
       repeat(seq("::", $.identifier))
     ),
 

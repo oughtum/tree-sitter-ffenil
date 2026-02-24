@@ -2,7 +2,9 @@ import modules::lib;
 merge modules::conf;
 import modules::libAndConf;
 
-import std::{ self::fmt, io };
+import std;
+import std::io;
+merge root::myModule;
 
 str             = "foo bar";
 interpolatedStr = "${str} baz";
@@ -30,7 +32,7 @@ updatedRecord = let
   mut record             = { key = "value" };
   record.key2           <- 4;
   record."stringKey :3" <- true;
-  record                 = { freshKey = "freshValue" };
+  record                <- { freshKey = "freshValue" };
 in
   record; 
 
@@ -44,7 +46,7 @@ type FloatType   = float;
 type BoolType    = bool;
 type TupleType   = (int, bool);
 type ArrayType   = [str];
-type RecordType  = { key : str, optionalKey? : float, "stringKey" : bool };
+type RecordType  = { key : str, optionalKey? : float, "stringKey" : bool, .. };
 type ClosureType = int -> int -> int;
 
 inferredType       = ":3";

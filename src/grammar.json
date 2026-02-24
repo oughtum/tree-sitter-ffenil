@@ -98,17 +98,8 @@
           ]
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "module_group"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "_submodule_group"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "module_path"
         },
         {
           "type": "STRING",
@@ -116,87 +107,21 @@
         }
       ]
     },
-    "module_group": {
+    "module_path": {
       "type": "SEQ",
       "members": [
-        {
-          "type": "STRING",
-          "value": "{"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_submodule_group"
-        },
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "STRING",
-                "value": ","
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_submodule_group"
-              }
-            ]
-          }
-        },
         {
           "type": "CHOICE",
           "members": [
             {
               "type": "STRING",
-              "value": ","
+              "value": "root"
             },
             {
-              "type": "BLANK"
+              "type": "SYMBOL",
+              "name": "identifier"
             }
           ]
-        },
-        {
-          "type": "STRING",
-          "value": "}"
-        }
-      ]
-    },
-    "_submodule_group": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "module_path"
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SEQ",
-              "members": [
-                {
-                  "type": "STRING",
-                  "value": "::"
-                },
-                {
-                  "type": "SYMBOL",
-                  "name": "module_group"
-                }
-              ]
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        }
-      ]
-    },
-    "module_path": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "identifier"
         },
         {
           "type": "REPEAT",
@@ -2103,6 +2028,10 @@
       {
         "type": "STRING",
         "value": "return"
+      },
+      {
+        "type": "STRING",
+        "value": "root"
       }
     ]
   }
