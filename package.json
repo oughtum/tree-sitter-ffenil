@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-ffenil",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Ffenil grammar for tree-sitter",
   "repository": "github.com:oughtum/tree-sitter-ffenil",
   "license": "MIT",

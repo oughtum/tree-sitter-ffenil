@@ -10,31 +10,35 @@
 //----------//
 // KEYWORDS //
 //----------//
-const IMPORT = "import";
-const MERGE = "merge";
-const TRUE = "true";
-const FALSE = "false";
-const IF = "if";
-const THEN = "then";
-const ELSE = "else";
-const ENUM = "enum";
-const TYPE = "type";
-const INHERIT = "inherit";
-const WITH = "with";
-const SCOPED = "scoped";
-const MATCH = "match";
-const PUB = "pub";
-const AND = "and";
-const OR = "or";
-const DO = "do";
-const LET = "let";
-const MUT = "mut";
-const IN = "in";
-const RETURN = "return";
-const ROOT = "root";
+const KEYWORDS = {
+  import: "import",
+  merge: "merge",
+  true: "true",
+  false: "false",
+  if: "if",
+  then: "then",
+  else: "else",
+  enum: "enum",
+  type: "type",
+  inherit: "inherit",
+  with: "with",
+  scoped: "scoped",
+  match: "match",
+  pub: "pub",
+  and: "and",
+  or: "or",
+  do: "do",
+  let: "let",
+  mut: "mut",
+  in: "in",
+  return: "return",
+  root: "root"
+};
 
 module.exports = grammar({
   name: "ffenil",
+
+  word: $ => $.identifier,
 
   extras: $ => [
     /\s/, // whitespace
@@ -50,28 +54,28 @@ module.exports = grammar({
 
   reserved: {
     global: _ => [
-      IMPORT,
-      MERGE,
-      TRUE,
-      FALSE,
-      IF,
-      THEN,
-      ELSE,
-      ENUM,
-      TYPE,
-      INHERIT,
-      WITH,
-      SCOPED,
-      MATCH,
-      PUB,
-      AND,
-      OR,
-      DO,
-      LET,
-      MUT,
-      IN,
-      RETURN,
-      ROOT
+      KEYWORDS.import,
+      KEYWORDS.merge,
+      KEYWORDS.true,
+      KEYWORDS.false,
+      KEYWORDS.if,
+      KEYWORDS.then,
+      KEYWORDS.else,
+      KEYWORDS.enum,
+      KEYWORDS.type,
+      KEYWORDS.inherit,
+      KEYWORDS.with,
+      KEYWORDS.scoped,
+      KEYWORDS.match,
+      KEYWORDS.pub,
+      KEYWORDS.and,
+      KEYWORDS.or,
+      KEYWORDS.do,
+      KEYWORDS.let,
+      KEYWORDS.mut,
+      KEYWORDS.in,
+      KEYWORDS.return,
+      KEYWORDS.root
     ]
   },
 
@@ -89,14 +93,14 @@ module.exports = grammar({
     //---------//        
     imports: $ => seq(
       choice(
-        seq(IMPORT, optional(MERGE)),
-        seq(MERGE, optional(IMPORT))
+        seq(KEYWORDS.import, optional(KEYWORDS.merge)),
+        seq(KEYWORDS.merge, optional(KEYWORDS.import))
       ),
       $.module_path,
       ";"
     ),
     module_path: $ => seq(
-      choice(ROOT, $.identifier),
+      choice(KEYWORDS.root, $.identifier),
       repeat(seq("::", $.identifier))
     ),
 
@@ -104,7 +108,8 @@ module.exports = grammar({
     // STATEMENTS //
     //------------//
     statement: $ => seq(
-      optional(PUB),
+      optional($.doc_comment),
+      optional(KEYWORDS.pub),
       choice(
         $.var_declaration,
         $.type_alias,
@@ -120,20 +125,20 @@ module.exports = grammar({
     ),
     assignment: $ => seq($.get, "<-", $.expr),
     type_alias: $ => seq(
-      TYPE,
+      KEYWORDS.type,
       $.identifier,
       "=",
       $.type
     ),
     enum_definition: $ => seq(
-      ENUM,
+      KEYWORDS.enum,
       field("name", $.identifier),
       "=",
       $.enum_definition_variant,
       repeat1(seq("|", $.enum_definition_variant))
     ),
     enum_definition_variant: $ => seq($.identifier, optional($.type)),
-    return: $ => seq(RETURN, $.expr, ";"),
+    return: $ => seq(KEYWORDS.return, $.expr, ";"),
 
     //-------------//
     // EXPRESSIONS //
@@ -150,8 +155,8 @@ module.exports = grammar({
     )),
     binary: $ => choice(
       prec.left(1, seq($.expr, "|>", $.expr)),
-      prec.left(2, seq($.expr, OR, $.expr)),
-      prec.left(3, seq($.expr, AND, $.expr)),
+      prec.left(2, seq($.expr, KEYWORDS.or, $.expr)),
+      prec.left(3, seq($.expr, KEYWORDS.and, $.expr)),
       prec.left(4, seq($.expr, "==", $.expr)),
       prec.left(4, seq($.expr, "!=", $.expr)),
       prec.left(5, seq($.expr, "<", $.expr)),
@@ -183,63 +188,41 @@ module.exports = grammar({
       $.get
     )),
     if_then_else: $ => seq(
-      IF,
+      KEYWORDS.if,
       $.expr,
-      THEN,
+      KEYWORDS.then,
       $.expr,
-      ELSE,
+      KEYWORDS.else,
       $.expr
     ),
     let_in: $ => seq(
-      LET,
+      KEYWORDS.let,
       repeat1(
         seq(choice(
-            seq(optional(MUT), $.var_declaration),
+            seq(optional(KEYWORDS.mut), $.var_declaration),
             $.assignment
           ),
         ";"
       )),
-      IN,
+      KEYWORDS.in,
       $.expr
     ),
-    do: $ => prec.left(0, seq(DO, $.expr, repeat(seq(",", $.expr)))),
+    do: $ => prec.left(0, seq(KEYWORDS.do, $.expr, repeat(seq(",", $.expr)))),
     with: $ => prec.left(0, seq(
-      WITH,
-      optional(SCOPED),
+      KEYWORDS.with,
+      optional(KEYWORDS.scoped),
       $.expr,
       ";",
       $.expr
     )),
     match: $ => prec.left(0, seq(
-      MATCH,
+      KEYWORDS.match,
       $.expr,
       ";",
       $.match_arm,
       repeat(seq(",", $.match_arm))
     )),
-    match_arm: $ => seq($.destructure, "=>", $.expr),
-    destructure: $ => choice(
-      $.tuple_destructure,
-      $.enum_destructure,
-      $.record_destructure,
-      $.grouping_destructure,
-      $.literal
-    ),
-    tuple_destructure: $ => seq(
-      "(",
-      $.destructure,
-      repeat1(seq(",", $.destructure)),
-      ")"
-    ),
-    enum_destructure: $ => seq($.module_path, $.destructure),
-    record_destructure: $ => seq(
-      "{",
-      $.record_key,
-      repeat(seq(",", $.record_key)),
-      optional(seq(",", "..")),
-      "}"
-    ),
-    grouping_destructure: $ => seq("(", $.destructure, ")"),
+    match_arm: $ => seq($.expr, "=>", $.expr),
     get: $ => prec(13, seq($.module_path, repeat(seq(".", $.record_key)))),
     tuple: $ => seq(
       "(",
@@ -259,16 +242,18 @@ module.exports = grammar({
     ),
     record: $ => seq(
       "{",
-      $.record_field,
-      repeat(seq(",", $.record_field)),
-      optional(","),
+      optional(seq(
+        $.record_field,
+        repeat(seq(",", $.record_field)),
+        optional(",")
+      )),
       "}"
     ),
     record_key: $ => choice($.identifier, $.string),
     record_field: $ => choice(
       seq($.record_key, "=", $.expr),
-      seq(INHERIT, repeat1($.identifier)),
-      seq("..", $.record_key)
+      seq(KEYWORDS.inherit, repeat1($.identifier)),
+      seq("..", $.identifier)
     ),
     closure: $ => seq(
       "|",
@@ -305,10 +290,12 @@ module.exports = grammar({
     array_type: $ => seq("[", $.type, "]"),
     record_type: $ => seq(
       "{",
-      $.record_field_type,
-      repeat(seq(",", $.record_field_type)),
-      optional(seq(",", "..")),
-      optional(","),
+      optional(seq(
+        $.record_field_type,
+        repeat(seq(",", $.record_field_type)),
+        optional(seq(",", "..")),
+        optional(",")
+      )),
       "}"
     ),
     record_field_type: $ => seq(
@@ -365,7 +352,7 @@ module.exports = grammar({
     hex_int: _ => /0x[0-9a-fA-F]+/,
 
     float: _ => /[0-9]+[.][0-9]+/,
-    bool: _ => choice(TRUE, FALSE),
+    bool: _ => choice(KEYWORDS.true, KEYWORDS.false),
 
     //----------//
     // COMMENTS //

@@ -4,7 +4,7 @@ endif
 
 LANGUAGE_NAME := tree-sitter-ffenil
 HOMEPAGE_URL := github.com:oughtum/tree-sitter-ffenil
-VERSION := 0.1.0
+VERSION := 0.2.0
 
 # repository
 SRC_DIR := src

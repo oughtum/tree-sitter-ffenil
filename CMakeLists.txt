@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-ffenil
-        VERSION "0.1.0"
+        VERSION "0.2.0"
         DESCRIPTION "Ffenil grammar for tree-sitter"
         HOMEPAGE_URL "github.com:oughtum/tree-sitter-ffenil"
         LANGUAGES C)

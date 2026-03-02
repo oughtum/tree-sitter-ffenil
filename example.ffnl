@@ -75,8 +75,8 @@ inherited =
     { inherit a b };
 option = Option::None;
 matchExpr = match option;
-  Some string => true,
-  { key, value, .. } => false;
+  Option::Some { a = false } => true,
+  Option::None => false;
 a              = 1;
 record         = { a = 2 };
 withExpr       = with record; a;

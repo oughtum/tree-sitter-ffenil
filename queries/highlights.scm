@@ -95,12 +95,6 @@
 
 (enum_definition_variant
   (identifier) @type.enum.variant)
-(enum_destructure
-  (module_path
-    (identifier) @type.enum.variant .))
-(destructure
-  (literal
-    (identifier) @variable.other.member))
 (get
   (record_key
     (identifier) @variable.other.member))
