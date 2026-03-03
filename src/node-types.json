@@ -435,7 +435,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "identifier",
@@ -1113,10 +1113,6 @@
   },
   {
     "type": "return",
-    "named": false
-  },
-  {
-    "type": "root",
     "named": false
   },
   {

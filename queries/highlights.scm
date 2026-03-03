@@ -40,9 +40,9 @@
 ;---------;
 ; MODULES ;
 ;---------;
+
 (module_path (identifier)) @namespace
-(module_path
-  . (identifier) @variable.builtin (#eq? @variable.builtin "root"))
+(module_path . (identifier) @variable.builtin (#eq? @variable.builtin "root"))
   
 ;----------;
 ; LITERALS ;
@@ -98,21 +98,35 @@
 (get
   (record_key
     (identifier) @variable.other.member))
+(get
+  (module_path
+    (identifier) @type .
+      (#match? @type "^[A-Z_][a-zA-Z0-9_]*'*") .))
+(literal
+  (identifier) @type
+    (#match? @type "^[A-Z_][a-zA-Z0-9_]*'*") .)
+
 (call
   func: (expr
     (primary
       [
         (get
-          [
-            (record_key
-              (identifier) .)
-            (module_path
-              (identifier) .)
-          ] @function.call)
+          (record_key (identifier) @function.call))
+        (get
+          (module_path
+            (identifier) @function.call
+              (#match? @function.call "^[a-z_][a-zA-Z0-9_]*'*") .))
         (literal
-          (identifier))
-      ] @function.call)))
-
+          (identifier) @function.call
+            (#match? @function.call "^[a-z_][a-zA-Z0-9_]*'*") .)
+        (get
+          (module_path
+            (identifier) @constructor
+              (#match? @constructor "^[A-Z_][a-zA-Z0-9_]*'*") .))
+        (literal
+          (identifier) @constructor
+            (#match? @constructor "^[A-Z_][a-zA-Z0-9_]*'*") .)
+      ])))
 (closure
   (identifier) @variable.parameter)
 

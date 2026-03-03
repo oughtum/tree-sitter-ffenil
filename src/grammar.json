@@ -112,17 +112,8 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "root"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "identifier"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "identifier"
         },
         {
           "type": "REPEAT",
@@ -1831,9 +1822,6 @@
     [
       "call",
       "binary"
-    ],
-    [
-      "module_path"
     ]
   ],
   "precedences": [],
@@ -1925,10 +1913,6 @@
       {
         "type": "STRING",
         "value": "return"
-      },
-      {
-        "type": "STRING",
-        "value": "root"
       }
     ]
   }

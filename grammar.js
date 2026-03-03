@@ -32,7 +32,6 @@ const KEYWORDS = {
   mut: "mut",
   in: "in",
   return: "return",
-  root: "root"
 };
 
 module.exports = grammar({
@@ -49,7 +48,6 @@ module.exports = grammar({
   conflicts: $ => [
     [$.call, $.unary, $.binary],
     [$.call, $.binary],
-    [$.module_path]
   ],
 
   reserved: {
@@ -75,7 +73,6 @@ module.exports = grammar({
       KEYWORDS.mut,
       KEYWORDS.in,
       KEYWORDS.return,
-      KEYWORDS.root
     ]
   },
 
@@ -100,7 +97,7 @@ module.exports = grammar({
       ";"
     ),
     module_path: $ => seq(
-      choice(KEYWORDS.root, $.identifier),
+      $.identifier,
       repeat(seq("::", $.identifier))
     ),
 
